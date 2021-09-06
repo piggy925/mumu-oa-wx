@@ -15,11 +15,15 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		methods: {
-			
+			toRegister: function() {
+				uni.navigateTo({
+					url: "../register/register"
+				});
+			}
 		}
 	}
 </script>
