@@ -19,18 +19,49 @@
 		},
 		methods: {
 			register: function() {
+				let vueObj = this;
+				if (vueObj.registerCode == null || vueObj.registerCode == "") {
+					uni.showToast({
+						icon: "none",
+						title: "注册码不能为空"
+					})
+					return;
+				} else if (!/^[0-9]{6}$/.test(vueObj.registerCode)) {
+					uni.showToast({
+						icon: "none",
+						title: "注册码必须为6位数字"
+					})
+					return;
+				}
+
+				let code = '';
 				uni.login({
 					provider: "weixin",
 					success: function(resp) {
-						console.log(resp.code)
+						code = resp.code;
 					}
-				})
+				});
+
 				uni.getUserProfile({
 					desc: "weixin",
 					success: function(resp) {
 						console.log(resp)
+						let nickName = resp.userInfo.nickName;
+						let avatarUrl = resp.userInfo.avatarUrl;
+						console.log("login code: " + code);
+						let data = {
+							code: code,
+							nickname: nickName,
+							photo: avatarUrl,
+							registerCode: vueObj.registerCode
+						}
+						vueObj.ajax(vueObj.url.register, "POST", data, function(resp) {
+							let permission = resp.data.permission;
+							uni.setStorageSync("permission", permission);
+							console.log("permission: " + permission);
+							//TODO 跳转到index页面
+						})
 					}
-
 				});
 			}
 		}
