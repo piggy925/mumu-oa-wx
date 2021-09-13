@@ -11,8 +11,9 @@ app.$mount()
 
 let baseUrl = "http://localhost:8080/mumu-oa"
 Vue.prototype.url = {
-	register: baseUrl + "/user/register"
-}
+	register: baseUrl + "/user/register",
+	login: baseUrl + "/user/login",
+} 
 
 Vue.prototype.ajax = function(url, method, data, fun) {
 	uni.request({

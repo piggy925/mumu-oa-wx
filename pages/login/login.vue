@@ -19,6 +19,30 @@
 			}
 		},
 		methods: {
+			login: function() {
+				let vueObj = this;
+				uni.login({
+					provider: "weixin",
+					success: function(resp) {
+						let code = resp.code;
+						vueObj.ajax(vueObj.url.login, "POST", {
+							"code": code
+						}, function(resp) {
+							let permission = resp.data.permission;
+							uni.setStorageSync("permission", permission);
+							console.log("login success")
+							//TODO 跳转到登录页面
+						});
+					},
+					fail: function(e) {
+						console.log("login error: " + e);
+						uni.showToast({
+							icon: "none",
+							title: "登录失败"
+						})
+					}
+				})
+			},
 			toRegister: function() {
 				uni.navigateTo({
 					url: "../register/register"
