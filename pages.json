@@ -53,7 +53,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/checkin/checkin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "MuMu在线办公系统",
