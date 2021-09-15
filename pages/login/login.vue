@@ -32,6 +32,9 @@
 							uni.setStorageSync("permission", permission);
 							console.log("login success")
 							//TODO 跳转到登录页面
+							uni.switchTab({
+								url:"../index/index"
+							})
 						});
 					},
 					fail: function(e) {
