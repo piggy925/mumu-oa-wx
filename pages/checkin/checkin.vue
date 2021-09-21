@@ -14,6 +14,8 @@
 </template>
 
 <script>
+	var QQMapWX = require('../../lib/qqmap-wx-jssdk.min.js');
+	var qqmapsdk;
 	export default {
 		data() {
 			return {
@@ -23,6 +25,11 @@
 				showCamera: true,
 				showImage: false
 			}
+		},
+		onLoad: function() {
+			qqmapsdk = new QQMapWX({
+				key: "KG2BZ-57MCU-XULVM-4R433-UM5AV-KJF2B"
+			})
 		},
 		methods: {
 			clickBtn: function() {
@@ -41,6 +48,33 @@
 					})
 				} else {
 					//点击签到
+					uni.showLoading({
+						title: "签到中，请稍后"
+					})
+					setTimeout(function() {
+						uni.hideLoading()
+					}, 30000)
+					uni.getLocation({
+						type: "wgs84",
+						success: function(resp) {
+							let latitude = resp.latitude;
+							let longitude = resp.longitude;
+							qqmapsdk.reverseGeocoder({
+								location: {
+									latitude: latitude,
+									longitude: longitude
+								},
+								success: function(resp) {
+									let address = resp.result.address;
+									let addressComponent = resp.result.address_component;
+									let nation = addressComponent.nation;
+									let province = addressComponent.province;
+									let city = addressComponent.city;
+									let distract = addressComponent.distract;
+								}
+							})
+						}
+					})
 				}
 			},
 			afresh: function() {
