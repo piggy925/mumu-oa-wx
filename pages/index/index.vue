@@ -1,5 +1,8 @@
 <template>
 	<view class="page">
+		<uni-popup ref="popupMsg" type="top">
+			<uni-popup-message type="success" :message="'接收到' + lastRows + '条消息'" :duration="2000" />
+		</uni-popup>
 		<swiper circular="true" interval="8000" duration="1000" class="swiper">
 			<swiper-item>
 				<image mode="widthFix" src="https://emos-img.oss-cn-shanghai.aliyuncs.com/img/banner/swiper-1.jpg">
@@ -92,14 +95,48 @@
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-popup/uni-popup.vue';
+	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue';
+	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue';
 	export default {
+		components: {
+			uniPopup,
+			uniPopupMessage,
+			uniPopupDialog
+		},
 		data() {
 			return {
-				unreadRows: 0
+				timer: null,
+				unreadRows: 0,
+				lastRows: 0
 			}
 		},
 		onLoad() {
-
+			let that = this;
+			uni.$on('showMessage',function(){
+				that.$refs.popupMsg.open()
+			})
+		},
+		onUnload() {
+			uni.$off('showMessage',function(){
+				that.$refs.popupMsg.close()
+			})
+		},
+		onShow() {
+			let that = this;
+			that.timer = setInterval(function(){
+				that.ajax(that.url.refreshMessage,"GET",null,function(resp){
+					that.unreadRows = resp.data.unreadRows
+					that.lastRows = resp.data.lastRows
+					if(that.lastRows>0){
+						uni.$emit('showMessage')
+					}
+				})
+			},5000)
+		},
+		onHide() {
+			let that = this;
+			clearInterval(that.timer)
 		},
 		methods: {
 			toPage: function(name, url) {
