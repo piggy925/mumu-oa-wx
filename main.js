@@ -13,8 +13,12 @@ let baseUrl = "http://localhost:8080/mumu-oa"
 Vue.prototype.url = {
 	register: baseUrl + "/user/register",
 	login: baseUrl + "/user/login",
-	refreshMessage: baseUrl + "/message/refreshMessage"
-} 
+	refreshMessage: baseUrl + "/message/refreshMessage",
+	searchMessageById: baseUrl + "/message/searchMessageById",
+	searchMessageByPage: baseUrl + "/message/searchMessageByPage",
+	updateUnreadMessage: baseUrl + "/message/updateUnreadMessage",
+	deleteMessageRefById: baseUrl + "/message/deleteMessageRefById"
+}
 
 Vue.prototype.ajax = function(url, method, data, fun) {
 	uni.request({
