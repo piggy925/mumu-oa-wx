@@ -3,8 +3,8 @@
 		<uni-list>
 			<uni-list>
 				<uni-list-chat v-for="one in list" :key="one.id" :title="one.senderName" :note="one.msg"
-					:avatar="one.senderPhoto" badgePositon="left" :badge-text="one.readFlag ? '' : 'dot'" link="navigateTo"
-					:to="''">
+					:avatar="one.senderPhoto" badgePositon="left" :badge-text="one.readFlag ? '' : 'dot'"
+					link="navigateTo" :to="''">
 					<view class="chat-custom-right">
 						<text class="chat-custom-text">{{one.senderTime}}</text>
 					</view>
@@ -22,20 +22,55 @@
 			return {
 				page: 1,
 				length: 20,
-				list: [{
-					id: "61505ad5047e322c78b22d15",
-					refId: "3dd91350209e48ad8e3b6b0a5dba9ad1",
-					senderName: "系统消息",
-					senderPhoto: "https://static-1258386385.cos.ap-beijing.myqcloud.com/img/System.jpg",
-					msg: "这是第8条测试消息",
-					readFlag: false,
-					senderTime: "2021-09-26 19:34:45.04"
-				}],
+				list: [],
 				isLastPage: false
 			}
 		},
+		onShow: function() {
+			let that = this;
+			that.page = 1;
+			that.isLastPage = false;
+			uni.pageScrollTo({
+				scrollTop: "0"
+			})
+			that.loadMessageList(that);
+		},
+		onReachBottom: function() {
+			let that = this;
+			if (!that.isLastPage) {
+				that.page = that.page + 1;
+				that.loadMessageList(that);
+			}
+		},
 		methods: {
-
+			loadMessageList: function(ref) {
+				let data = {
+					page: ref.page,
+					length: ref.length
+				}
+				ref.ajax(ref.url.searchMessageByPage, "POST", data, function(resp) {
+					let result = resp.data.result;
+					if (result.length == 0 || result == null) {
+						ref.isLastPage = true;
+						ref.page = page - 1;
+						uni.showToast({
+							icon: "none",
+							title: "已经到底了"
+						})
+					} else {
+						if (ref.page == 1) {
+							ref.list = [];
+						}
+						ref.list = ref.list.concat(result);
+						if (ref.page > 1) {
+							uni.showToast({
+								icon: "none",
+								title: "又加载了" + result.length + "条消息"
+							})
+						}
+					}
+				})
+			}
 		}
 	}
 </script>

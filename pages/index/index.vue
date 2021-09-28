@@ -25,7 +25,7 @@
 				</image>
 			</swiper-item>
 		</swiper>
-		<view class="notify-container">
+		<view class="notify-container" @click="toPage('消息提醒', '../message_list/message_list')">
 			<view class="notify-title">
 				<image src="../../static/icon-1.png" mode="widthFix" class="notify-icon"></image>
 				消息提醒
