@@ -115,6 +115,13 @@
 			let that = this;
 			uni.$on('showMessage',function(){
 				that.$refs.popupMsg.open()
+			});
+			that.ajax(that.url.refreshMessage,"GET",null,function(resp){
+				that.unreadRows = resp.data.unreadRows
+				that.lastRows = resp.data.lastRows
+				if(that.lastRows>0){
+					uni.$emit('showMessage')
+				}
 			})
 		},
 		onUnload() {
