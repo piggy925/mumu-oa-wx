@@ -4,7 +4,7 @@
 			<uni-list>
 				<uni-list-chat v-for="one in list" :key="one.id" :title="one.senderName" :note="one.msg"
 					:avatar="one.senderPhoto" badgePositon="left" :badge-text="one.readFlag ? '' : 'dot'"
-					link="navigateTo" :to="''">
+					link="navigateTo" :to="'../message/message?id=' + one.id + '&readFlag=' + one.readFlag + '&refId=' + one.refId">
 					<view class="chat-custom-right">
 						<text class="chat-custom-text">{{one.senderTime}}</text>
 					</view>
